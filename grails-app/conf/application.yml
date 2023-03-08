@@ -3,15 +3,15 @@ grails:
     profile: web
     codegen:
         defaultPackage: api.medirecord
-    mongodb:
-        host: localhost
-        port: 27017
-        databaseName: medirecord
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
+    mongodb:
+        host: localhost
+        port: 27017
+        databaseName: medirecord
     cors:
         enabled: true
 

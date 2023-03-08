@@ -18,6 +18,8 @@ class PatientController {
             def doctor = Doctor.get(doctorId)
             patientService.addPatientToDoctor(patient, doctor)
             def response = [:]
+            response.endpoint = request.requestURI
+            response.method = request.method
             response.message = 'Patient added to doctor successfully'
             response.status = HttpServletResponse.SC_OK
 
@@ -37,6 +39,8 @@ class PatientController {
         def doctor = Doctor.get(doctorId)
         def patients = patientService.getPatientsByDoctor(doctor)
         def response = [:]
+        response.endpoint = request.requestURI
+        response.method = request.method
         response.message = 'Patients retrieved successfully'
         response.status = HttpServletResponse.SC_OK
         response.patients = patients

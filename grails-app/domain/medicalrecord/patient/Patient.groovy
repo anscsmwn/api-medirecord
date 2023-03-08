@@ -17,4 +17,5 @@ class Patient {
         phone nullable: true, maxSize: 255
         doctor nullable: false
     }
+
 }

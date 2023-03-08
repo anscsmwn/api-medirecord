@@ -11,10 +11,13 @@ class DoctorController {
 
     def register() {
         def response = [:]
+        response.endpoint = request.requestURI
+        response.method = request.method
         def requestBody = request.JSON
 
         // Validate the request body
         def errors = validateDoctor(requestBody)
+
         if (errors) {
             response.errors = errors
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -43,10 +46,11 @@ class DoctorController {
 
     def login() {
         def response = [:]
+        response.endpoint = request.requestURI
+        response.method = request.method
         def requestBody = request.JSON
         def email = requestBody.email
         def password = requestBody.password
-
         def doctor = Doctor.findByEmail(email)
 
         if (doctor && BCrypt.checkpw(password, doctor.password)) {
