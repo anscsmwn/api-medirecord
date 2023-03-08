@@ -35,7 +35,7 @@ class PatientController {
         def token = request.getHeader('Authorization').substring('Bearer '.length())
         def doctorId = Doctor.getIdFromToken(token)
         def doctor = Doctor.get(doctorId)
-        def patients = patientService.list(doctor: doctor)
+        def patients = patientService.getPatientsByDoctor(doctor)
         def response = [:]
         response.message = 'Patients retrieved successfully'
         response.status = HttpServletResponse.SC_OK
