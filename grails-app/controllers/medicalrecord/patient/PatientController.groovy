@@ -31,4 +31,16 @@ class PatientController {
             render response as JSON
         }
     }
+    def getPatientsByDoctor() {
+        def token = request.getHeader('Authorization').substring('Bearer '.length())
+        def doctorId = Doctor.getIdFromToken(token)
+        def doctor = Doctor.get(doctorId)
+        def patients = patientService.list(doctor: doctor)
+        def response = [:]
+        response.message = 'Patients retrieved successfully'
+        response.status = HttpServletResponse.SC_OK
+        response.patients = patients
+
+        render response as JSON
+    }
 }

@@ -11,4 +11,9 @@ class PatientService {
         patient.save(flush: true)
     }
 
+    List<Patient> getPatientsByDoctor(Doctor doctor) {
+        List<Patient> listOfPatients = Patient.findAllByDoctor(doctor)
+        return listOfPatients
+    }
+
 }
