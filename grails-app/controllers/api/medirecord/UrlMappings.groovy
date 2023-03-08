@@ -18,7 +18,9 @@ class UrlMappings {
         "/api/patient"(controller: "patient", parseRequest: true, action: "addPatientToDoctor"){
             method = "POST"
         }
-
+        "/api/patient"(controller: "patient", parseRequest: true, action: "getPatientsByDoctor"){
+            method = "GET"
+        }
         "/"(view:"/index")
         "500"(view:'/error')
         "404"(view:'/notFound')
