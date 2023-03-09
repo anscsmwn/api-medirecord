@@ -9,12 +9,16 @@ class Doctor {
     String name
     String email
     String password
+    List <String> specializations
     static mapWith = "mongo"
 
     static constraints = {
         name nullable: false
-        email nullable: false
+        email nullable: false, unique: true, maxSize: 255
         password nullable: false
+        specializations nullable: true, validator: { val, obj ->
+            return val?.every { it.length() <= 50 }
+        }
     }
 
     def beforeInsert() {

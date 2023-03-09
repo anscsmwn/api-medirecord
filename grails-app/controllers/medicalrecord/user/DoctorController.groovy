@@ -29,13 +29,23 @@ class DoctorController {
         def doctor = new Doctor(
                 name: requestBody.name,
                 email: requestBody.email,
-                password: requestBody.password
+                password: requestBody.password,
+                specializations: requestBody.specializations
         )
+
+        // Check if the email doctor already exist
+        if (Doctor.findByEmail(doctor.email)) {
+            response.errors = ['email': 'Email already exists']
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render response as JSON
+            return
+        }
 
         // Save the doctor instance
         try {
             doctorService.save(doctor)
             response.status = HttpServletResponse.SC_CREATED
+            response.message = 'Doctor registered successfully'
         } catch (Exception e) {
             response.errors = ['Failed to save doctor']
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
