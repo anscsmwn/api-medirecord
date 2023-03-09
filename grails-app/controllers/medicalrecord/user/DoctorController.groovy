@@ -65,7 +65,12 @@ class DoctorController {
             def email = requestBody.email
             def password = requestBody.password
             def doctor = Doctor.findByEmail(email)
-
+            if(!doctor){
+                response.status = HttpServletResponse.SC_NOT_FOUND
+                response.message = 'Doctor not found'
+                render (response as JSON, status: HttpServletResponse.SC_NOT_FOUND)
+                return
+            }
             if (doctor && BCrypt.checkpw(password, doctor.password)) {
                 def token = Jwts.builder()
                         .setSubject(doctor.id.toString())
@@ -75,6 +80,7 @@ class DoctorController {
                 response.status = HttpServletResponse.SC_OK
                 response.message = 'Login successful'
                 response.token = token
+                response.doctor = doctor
                 render (response as JSON, status: HttpServletResponse.SC_OK)
             } else {
                 response.message = "Invalid email or password"
