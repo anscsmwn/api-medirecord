@@ -98,6 +98,7 @@ class PatientController {
         if (patient.validate()) {
             response.message = 'Patient updated successfully'
             response.status = HttpServletResponse.SC_OK
+            response.data = patient
         } else {
             response.message = 'Patient not updated'
             response.status = HttpServletResponse.SC_BAD_REQUEST
