@@ -2,6 +2,7 @@ package medicalrecord.patient
 
 import grails.gorm.transactions.Transactional
 import grails.web.servlet.mvc.GrailsParameterMap
+import medicalrecord.appoitment.MedicalRecord
 import medicalrecord.user.Doctor
 
 @Transactional
@@ -14,6 +15,16 @@ class PatientService {
 
     List<Patient> getPatientsByDoctor(Doctor doctor) {
         List<Patient> listOfPatients = Patient.findAllByDoctor(doctor)
+        for (Patient patient : listOfPatients) {
+            patient.doctor = null
+            // Get the last medical record of the patient
+            List<MedicalRecord> listOfMedicalRecords = MedicalRecord.findAllByPatient(patient)
+            if (listOfMedicalRecords.size() > 0) {
+                patient.lastVisited = listOfMedicalRecords.get(listOfMedicalRecords.size() - 1).createdAt
+            }else{
+                patient.lastVisited = null
+            }
+        }
         return listOfPatients
     }
 

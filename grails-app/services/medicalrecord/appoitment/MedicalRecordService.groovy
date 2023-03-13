@@ -2,11 +2,13 @@ package medicalrecord.appoitment
 
 import grails.gorm.transactions.Transactional
 import medicalrecord.user.Doctor
+import java.time.LocalDateTime
 
 @Transactional
 class MedicalRecordService {
 
     MedicalRecord addMedicalRecordToPatient(MedicalRecord medicalRecord) {
+        medicalRecord.createdAt = LocalDateTime.now().toString()
         medicalRecord.save(flush: true)
     }
     List <MedicalRecord> getMedicalRecordByDoctor(Doctor doctor){
