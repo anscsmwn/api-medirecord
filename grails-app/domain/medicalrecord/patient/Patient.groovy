@@ -9,6 +9,7 @@ class Patient {
     String address
     String phone
     Doctor doctor
+    String gender
     static mapWith = "mongo"
 
     static constraints = {
@@ -17,6 +18,7 @@ class Patient {
         birthDate nullable: false
         address nullable: true, maxSize: 255
         phone nullable: true, maxSize: 255
+        gender nullable: false, maxSize: 255
         doctor nullable: false
     }
 }

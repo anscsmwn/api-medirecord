@@ -94,6 +94,7 @@ class PatientController {
         patient.phone = requestBody.phone
         patient.birthDate =  birthDate
         patient.doctor = doctor
+        patient.gender = requestBody.gender
         patientService.updatePatient(patient)
         if (patient.validate()) {
             response.message = 'Patient updated successfully'
