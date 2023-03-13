@@ -35,6 +35,9 @@ class UrlMappings {
         "/api/patient/medical-numbers"(controller: "patient", parseRequest: true, action: "getMedicalNumberPatientsQuery"){
             method = "GET"
         }
+        "/api/medical-record"(controller: "medicalRecord", parseRequest: true, action: "addMedicalRecord"){
+            method = "POST"
+        }
         "/"(view:"/index")
         "500"(view:'/error')
 

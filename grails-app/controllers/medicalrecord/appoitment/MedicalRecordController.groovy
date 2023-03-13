@@ -18,10 +18,14 @@ class MedicalRecordController {
             Doctor doctor = getDoctorIdentity()
             medicalRecord.doctor = doctor
             medicalRecordService.addMedicalRecordToPatient(medicalRecord)
-            if(doctor.validate()){
+            if(medicalRecord.validate()){
                 response.message = 'Medical record added to patient successfully'
                 response.status = HttpServletResponse.SC_OK
                 response.data  = medicalRecord
+            }else{
+                response.message = 'Medical record not added to patient'
+                response.status = HttpServletResponse.SC_BAD_REQUEST
+                response.errors = medicalRecord.errors
             }}
         catch (Exception e) {
                 response.message = 'Error adding medical record to patient'

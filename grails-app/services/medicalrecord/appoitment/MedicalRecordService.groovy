@@ -1,15 +1,11 @@
 package medicalrecord.appoitment
 
 import grails.gorm.transactions.Transactional
-import medicalrecord.patient.Patient
 import medicalrecord.user.Doctor
 
 @Transactional
 class MedicalRecordService {
 
-    def serviceMethod() {
-
-    }
     MedicalRecord addMedicalRecordToPatient(MedicalRecord medicalRecord) {
         medicalRecord.save(flush: true)
     }
