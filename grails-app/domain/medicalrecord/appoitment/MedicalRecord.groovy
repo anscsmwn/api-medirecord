@@ -1,9 +1,11 @@
 package medicalrecord.appoitment
 
 import medicalrecord.patient.Patient
+import medicalrecord.user.Doctor
 
 class MedicalRecord {
     Patient patient
+    Doctor doctor
     String complaint
     String diagnosis
     String treatment
@@ -11,6 +13,7 @@ class MedicalRecord {
     List<String> medicines
     static mapWith = "mongo"
     static constraints = {
+        doctor nullable: false
         patient nullable: false
         complaint nullable: true, maxSize: 255
         diagnosis nullable: true, maxSize: 255

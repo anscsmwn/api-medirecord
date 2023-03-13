@@ -142,7 +142,25 @@ class PatientController {
             render response as JSON, status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR
         }
     }
-
+    def getMedicalNumberPatientsQuery(){
+        def response = [:]
+        response.endpoint = request.requestURI
+        response.method = request.method
+        def search = params.search
+        Doctor doctor = getDoctorIdentity()
+        try{
+            def medicalNumbers = patientService.getMedicalNumbersByQuery(search, doctor)
+            response.message =  'Medical records retrieved successfully'
+            response.status = HttpServletResponse.SC_OK
+            response.data = medicalNumbers
+            render response as JSON
+        } catch (Exception e) {
+            response.message = 'Error retrieving medical records'
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            response.error = e.toString()
+            render response as JSON, status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        }
+    }
     private Doctor getDoctorIdentity() {
         def token = request.getHeader('Authorization').substring('Bearer '.length())
         def doctorId = Doctor.getIdFromToken(token)

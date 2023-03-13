@@ -32,6 +32,9 @@ class UrlMappings {
         "/api/patient/$id"(controller: "patient", parseRequest: true, action: "updatePatient"){
             method = "PUT"
         }
+        "/api/patient/medical-numbers"(controller: "patient", parseRequest: true, action: "getMedicalNumberPatientsQuery"){
+            method = "GET"
+        }
         "/"(view:"/index")
         "500"(view:'/error')
 
