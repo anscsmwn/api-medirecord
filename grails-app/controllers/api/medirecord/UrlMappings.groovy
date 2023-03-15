@@ -17,6 +17,9 @@ class UrlMappings {
         "/api/auth/login"(controller: "doctor", parseRequest: true, action: "login"){
             method = "POST"
         }
+        "/api/profile"(controller: "doctor", parseRequest: true, action: "getProfile"){
+            method = "GET"
+        }
         "/api/patient"(controller: "patient", parseRequest: true, action: "addPatientToDoctor"){
             method = "POST"
         }
@@ -35,9 +38,32 @@ class UrlMappings {
         "/api/patient/medical-numbers"(controller: "patient", parseRequest: true, action: "getMedicalNumberPatientsQuery"){
             method = "GET"
         }
+        "/api/patient/medical-record/$id"(controller: "patient", parseRequest: true, action: "getMedicalRecordPatient"){
+            method = "GET"
+        }
+        "/api/patient/medications/$id"(controller: "patient", parseRequest: true, action: "getMedications"){
+            method = "GET"
+        }
+
+        "/api/medical-record"(controller: "medicalRecord", parseRequest: true, action: "getMedicalRecordsByDoctor"){
+            method = "GET"
+        }
+        "/api/medical-record"(controller: "medicalRecord", parseRequest: true, action: "getMedicalRecordsByDoctor"){
+            method = "GET"
+        }
+        "/api/medical-record/$id"(controller: "medicalRecord", parseRequest: true, action: "getMedicalRecord"){
+            method = "GET"
+        }
         "/api/medical-record"(controller: "medicalRecord", parseRequest: true, action: "addMedicalRecord"){
             method = "POST"
         }
+        "/api/medical-record/$id"(controller: "medicalRecord", parseRequest: true, action: "updateMedicalRecord"){
+            method = "PUT"
+        }
+        "/api/medical-record/$id"(controller: "medicalRecord", parseRequest: true, action: "deleteMedicalRecord"){
+            method = "DELETE"
+        }
+
         "/"(view:"/index")
         "500"(view:'/error')
 

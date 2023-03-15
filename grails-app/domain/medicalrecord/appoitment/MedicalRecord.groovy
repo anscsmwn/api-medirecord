@@ -9,7 +9,7 @@ class MedicalRecord {
     String complaint
     String diagnosis
     String treatment
-    String observations
+    String observation
     List<String> medicines
     String createdAt
     static mapWith = "mongo"
@@ -19,9 +19,8 @@ class MedicalRecord {
         complaint nullable: true, maxSize: 255
         diagnosis nullable: true, maxSize: 255
         treatment nullable: true, maxSize: 255
-        observations nullable: true, maxSize: 255
+        observation nullable: true, maxSize: 255
         createdAt nullable: false
         medicines nullable: true, maxSize: 255
     }
-
 }

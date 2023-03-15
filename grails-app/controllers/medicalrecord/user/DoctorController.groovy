@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse
 
 class DoctorController {
 
-    def doctorService
+    DoctorService doctorService
 
     def register() {
         def response = [:]
@@ -95,7 +95,23 @@ class DoctorController {
             render (response as JSON, status: HttpServletResponse.SC_BAD_REQUEST)
         }
     }
-
+    def getProfile(){
+        def response = [:]
+        response.endpoint = request.requestURI
+        response.method = request.method
+        try {
+            Doctor doctor = getDoctorIdentity()
+            response.status = HttpServletResponse.SC_OK
+            response.message = 'Doctor profile'
+            response.data = doctor
+            render (response as JSON, status: HttpServletResponse.SC_OK)
+        } catch (Exception e) {
+            response.message = "Invalid request"
+            response.errors = ["request": "Invalid request"]
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render (response as JSON, status: HttpServletResponse.SC_BAD_REQUEST)
+        }
+    }
 
     // Validates the doctor data in the request body
     private Map validateDoctor(requestBody) {
@@ -111,7 +127,12 @@ class DoctorController {
         }
         return errors ? errors : null
     }
-
+    private Doctor getDoctorIdentity() {
+        def token = request.getHeader('Authorization').substring('Bearer '.length())
+        def doctorId = Doctor.getIdFromToken(token)
+        def doctor = Doctor.get(doctorId)
+        return doctor
+    }
     protected void notFound() {
         request.withFormat {
             form multipartForm {

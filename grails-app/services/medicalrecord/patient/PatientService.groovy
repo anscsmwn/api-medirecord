@@ -43,12 +43,22 @@ class PatientService {
         patient.delete()
     }
 
-    def getPatient(Long id) {
-        Patient.get(id)
+    Patient getPatient(Long id) {
+       return Patient.get(id)
     }
 
-    def updatePatient(Patient patient) {
+    void updatePatient(Patient patient) {
         patient.save(flush: true)
+    }
+
+    List<MedicalRecord> getMedicalRecordPatient (Patient patient) {
+        List<MedicalRecord> listOfMedicalRecords = MedicalRecord.findAllByPatient(patient)
+        return listOfMedicalRecords
+    }
+
+    List<String> getMedicationsByPatient (Patient patient) {
+        List<String> listOfMedications = MedicalRecord.findAllByPatient(patient).collect { it.medicines } as List<String>
+        return listOfMedications
     }
 
     // Make function for query patient's medical number

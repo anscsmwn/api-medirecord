@@ -37,17 +37,22 @@ class PatientController {
         }
     }
     def getPatientsByDoctor() {
-        def token = request.getHeader('Authorization').substring('Bearer '.length())
-        def doctorId = Doctor.getIdFromToken(token)
-        def doctor = Doctor.get(doctorId)
-        def patients = patientService.getPatientsByDoctor(doctor)
+        Doctor doctor = getDoctorIdentity()
         def response = [:]
         response.endpoint = request.requestURI
         response.method = request.method
-        response.message = 'Patients retrieved successfully'
-        response.status = HttpServletResponse.SC_OK
-        response.data = patients
-        render response as JSON
+        try{
+            def patients = patientService.getPatientsByDoctor(doctor)
+            response.message = 'Patients retrieved successfully'
+            response.status = HttpServletResponse.SC_OK
+            response.data = patients
+            render response as JSON
+        }  catch (Exception e) {
+            response.message = 'Error retrieving patients'
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            response.error = e.toString()
+            render response as JSON, status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        }
     }
     def getPatientById() {
         String patientId = params.id
@@ -55,7 +60,7 @@ class PatientController {
         response.endpoint = request.requestURI
         response.method = request.method
         try{
-            def patient = patientService.getPatientById(patientId)
+            Patient patient = patientService.getPatientById(patientId)
             if(!patient){
                 response.message = 'Patient not found'
                 response.status = HttpServletResponse.SC_NOT_FOUND
@@ -156,6 +161,42 @@ class PatientController {
             render response as JSON
         } catch (Exception e) {
             response.message = 'Error retrieving medical records'
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            response.error = e.toString()
+            render response as JSON, status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        }
+    }
+    def getMedicalRecordPatient() {
+        def response = [:]
+        response.endpoint = request.requestURI
+        response.method = request.method
+        Patient patient = patientService.getPatientById(params.id)
+        try{
+            def medicalRecord = patientService.getMedicalRecordPatient(patient)
+            response.message =  'Medical record retrieved successfully'
+            response.status = HttpServletResponse.SC_OK
+            response.data = medicalRecord
+            render response as JSON
+        } catch (Exception e) {
+            response.message = 'Error retrieving medical record'
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            response.error = e.toString()
+            render response as JSON, status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        }
+    }
+    def getMedications(){
+        def response = [:]
+        response.endpoint = request.requestURI
+        response.method = request.method
+        Patient patient = patientService.getPatientById(params.id)
+        try{
+            def medications = patientService.getMedicationsByPatient(patient)
+            response.message =  'Medications retrieved successfully'
+            response.status = HttpServletResponse.SC_OK
+            response.data = medications
+            render response as JSON
+        } catch (Exception e) {
+            response.message = 'Error retrieving medications'
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             response.error = e.toString()
             render response as JSON, status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR

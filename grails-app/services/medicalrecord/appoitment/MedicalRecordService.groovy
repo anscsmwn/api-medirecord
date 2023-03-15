@@ -23,7 +23,7 @@ class MedicalRecordService {
         MedicalRecord medicalRecord = MedicalRecord.get(id)
         medicalRecord.delete()
     }
-    MedicalRecord updateMedicalRecord( MedicalRecord medicalRecord) {
+    MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {
         medicalRecord.save(flush: true)
     }
 }
