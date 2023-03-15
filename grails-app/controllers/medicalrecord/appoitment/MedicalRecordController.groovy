@@ -18,15 +18,21 @@ class MedicalRecordController {
         try {
             Doctor doctor = getDoctorIdentity()
             List<MedicalRecord> medicalRecords = medicalRecordService.getMedicalRecordByDoctor(doctor)
+            List<Patient> patients = []
+            for (MedicalRecord medicalRecord : medicalRecords) {
+                Patient patient = Patient.get(medicalRecord.patient.id)
+                patients.add(patient)
+            }
             response.message = 'Medical records retrieved successfully'
             response.status = HttpServletResponse.SC_OK
-            response.data = medicalRecords
+            response.data = [medicalRecords: medicalRecords, patients: patients]
+            render (response as JSON, status: HttpServletResponse.SC_OK)
         } catch (Exception e) {
             response.message = 'Error retrieving medical records'
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             response.error = e.toString()
+            render (response as JSON, status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
         }
-        render response as JSON
     }
     def addMedicalRecord() {
         def requestBody = request.JSON

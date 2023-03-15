@@ -62,10 +62,13 @@ class PatientService {
     }
 
     // Make function for query patient's medical number
-    List<String> getMedicalNumbersByQuery (String search, Doctor doctor) {
-        List<String> listOfMedicalNumbers = Patient.findAllByDoctorAndMedicalNumberIlike(doctor,"%${search}%".toString()).collect(({ patient ->
-            [id: patient.id, medicalNumber: patient.medicalNumber]
-        } as Closure<String>))
-        return listOfMedicalNumbers
+    List<String> getMedicalNumbersByQuery(String search, Doctor doctor) {
+        List<String> medicalNumbers = Patient.createCriteria().list {
+            eq("doctor", doctor)
+            or {
+                ilike("medicalNumber", "%${search}%")
+            }
+        }.collect(({ [id: it.id, medicalNumber: it.medicalNumber] } as Closure<String>))
+        return medicalNumbers
     }
 }

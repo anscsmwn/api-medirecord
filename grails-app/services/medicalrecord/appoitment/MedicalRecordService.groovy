@@ -1,7 +1,10 @@
 package medicalrecord.appoitment
 
 import grails.gorm.transactions.Transactional
+import medicalrecord.patient.Patient
 import medicalrecord.user.Doctor
+import org.hibernate.Hibernate
+
 import java.time.LocalDateTime
 
 @Transactional
@@ -11,8 +14,8 @@ class MedicalRecordService {
         medicalRecord.createdAt = LocalDateTime.now().toString()
         medicalRecord.save(flush: true)
     }
-    List <MedicalRecord> getMedicalRecordByDoctor(Doctor doctor){
-        List <MedicalRecord> listOfMedicalRecords = MedicalRecord.findAllByDoctor(doctor)
+    List<MedicalRecord> getMedicalRecordByDoctor(Doctor doctor){
+        List<MedicalRecord> listOfMedicalRecords = MedicalRecord.findAllByDoctor(doctor)
         return listOfMedicalRecords
     }
     MedicalRecord getMedicalRecord(Long id){
