@@ -1,4 +1,7 @@
 ---
+myapp:
+    JWT_SECRET_KEY: 'I am a secret key'
+
 grails:
     profile: web
     codegen:

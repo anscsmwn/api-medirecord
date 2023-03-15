@@ -11,19 +11,21 @@ class DoctorInterceptor {
         def response = [:]
         response.endpoint = request.requestURI
         response.method = request.method
-                String token
+        String token
+
         if(request.getHeader('Authorization') != null){
             token = request.getHeader('Authorization').replaceFirst('Bearer ', '')
         }
         if(!token) {
-            response.status = HttpServletResponse.SC_FORBIDDEN
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.message = 'No token provided'
-            render (response as JSON, status: HttpServletResponse.SC_FORBIDDEN)
+            render (response as JSON, status: HttpServletResponse.SC_UNAUTHORIZED)
             return false
         }
         try {
-            // Check if the token is not expired and is valid
-            def claims = Jwts.parser().setSigningKey('secretKey'.getBytes('UTF-8')).parseClaimsJws(token).getBody()
+            // Check if the token is not expired
+            String secretKey = grailsApplication.config.myapp.JWT_SECRET_KEY
+            Jwts.parser().setSigningKey(secretKey.getBytes('UTF-8')).parseClaimsJws(token).getBody()
             return true
         } catch (Exception e) {
             response.status = HttpServletResponse.SC_FORBIDDEN

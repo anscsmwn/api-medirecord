@@ -118,9 +118,10 @@ class MedicalRecordController {
         }
     }
     private Doctor getDoctorIdentity() {
-        def token = request.getHeader('Authorization').substring('Bearer '.length())
-        def doctorId = Doctor.getIdFromToken(token)
-        def doctor = Doctor.get(doctorId)
+        String secretKey = grailsApplication.config.myapp.JWT_SECRET_KEY
+        String token = request.getHeader('Authorization').substring('Bearer '.length())
+        Long doctorId = Doctor.getIdFromToken(secretKey, token)
+        Doctor doctor = Doctor.get(doctorId)
         return doctor
     }
 

@@ -1,5 +1,6 @@
 package medicalrecord.user
 
+import io.jsonwebtoken.Claims
 import org.springframework.data.mongodb.core.mapping.Document
 import org.mindrot.jbcrypt.BCrypt
 import io.jsonwebtoken.Jwts
@@ -25,9 +26,9 @@ class Doctor {
         password = BCrypt.hashpw(password, BCrypt.gensalt())
     }
 
-    static Long getIdFromToken(String token) {
-        def claims = Jwts.parser()
-                .setSigningKey('secretKey'.getBytes('UTF-8'))
+    static Long getIdFromToken(String secretKey, String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey.getBytes('UTF-8'))
                 .parseClaimsJws(token)
                 .getBody()
         return Long.parseLong(claims.getSubject())

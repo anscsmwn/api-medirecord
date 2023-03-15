@@ -71,13 +71,15 @@ class DoctorController {
                 return
             }
             if (doctor && BCrypt.checkpw(password, doctor.password)) {
-                def now = new Date()
-                def expiryDate = new Date(now.time + 60000)
-                def token = Jwts.builder()
+                Date now = new Date()
+                Integer minutesMiliseconds = 1000 * 60
+                Date expiryDate = new Date(now.time + minutesMiliseconds * 30)
+                String secretKey = grailsApplication.config.myapp.JWT_SECRET_KEY
+                String token = Jwts.builder()
                         .setSubject(doctor.id.toString())
                         .setIssuedAt(now)
                         .setExpiration(expiryDate)
-                        .signWith(SignatureAlgorithm.HS512, 'secretKey'.getBytes('UTF-8'))
+                        .signWith(SignatureAlgorithm.HS512, secretKey.getBytes('UTF-8'))
                         .compact()
 
                 response.status = HttpServletResponse.SC_OK
@@ -93,7 +95,7 @@ class DoctorController {
             }
         } catch (Exception e) {
             response.message = "Invalid request"
-            response.errors = ["request": "Invalid request"]
+            response.errors = e.toString()
             response.status = HttpServletResponse.SC_BAD_REQUEST
             render (response as JSON, status: HttpServletResponse.SC_BAD_REQUEST)
         }
@@ -131,9 +133,10 @@ class DoctorController {
         return errors ? errors : null
     }
     private Doctor getDoctorIdentity() {
-        def token = request.getHeader('Authorization').substring('Bearer '.length())
-        def doctorId = Doctor.getIdFromToken(token)
-        def doctor = Doctor.get(doctorId)
+        String secretKey = grailsApplication.config.getProperty('env.JWT_SECRET_KEY')
+        String token = request.getHeader('Authorization').substring('Bearer '.length())
+        Long doctorId = Doctor.getIdFromToken(secretKey,token)
+        Doctor doctor = Doctor.get(doctorId)
         return doctor
     }
     protected void notFound() {

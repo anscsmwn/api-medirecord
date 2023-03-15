@@ -37,22 +37,24 @@ class PatientController {
         }
     }
     def getPatientsByDoctor() {
-        Doctor doctor = getDoctorIdentity()
+
         def response = [:]
         response.endpoint = request.requestURI
         response.method = request.method
-        try{
+        try {
+            Doctor doctor = getDoctorIdentity()
             def patients = patientService.getPatientsByDoctor(doctor)
             response.message = 'Patients retrieved successfully'
             response.status = HttpServletResponse.SC_OK
             response.data = patients
             render response as JSON
-        }  catch (Exception e) {
+        } catch (Exception e) {
             response.message = 'Error retrieving patients'
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             response.error = e.toString()
             render response as JSON, status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR
         }
+
     }
     def getPatientById() {
         String patientId = params.id
@@ -203,9 +205,10 @@ class PatientController {
         }
     }
     private Doctor getDoctorIdentity() {
-        def token = request.getHeader('Authorization').substring('Bearer '.length())
-        def doctorId = Doctor.getIdFromToken(token)
-        def doctor = Doctor.get(doctorId)
+        String secretKey = grailsApplication.config.myapp.JWT_SECRET_KEY
+        String token = request.getHeader('Authorization').substring('Bearer '.length())
+        Long doctorId = Doctor.getIdFromToken(secretKey,token)
+        Doctor doctor = Doctor.get(doctorId)
         return doctor
     }
 }
