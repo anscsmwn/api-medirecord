@@ -59,7 +59,6 @@ class DoctorController {
         def response = [:]
         response.endpoint = request.requestURI
         response.method = request.method
-
         try {
             def requestBody = request.JSON
             def email = requestBody.email
@@ -72,8 +71,12 @@ class DoctorController {
                 return
             }
             if (doctor && BCrypt.checkpw(password, doctor.password)) {
+                def now = new Date()
+                def expiryDate = new Date(now.time + 60000)
                 def token = Jwts.builder()
                         .setSubject(doctor.id.toString())
+                        .setIssuedAt(now)
+                        .setExpiration(expiryDate)
                         .signWith(SignatureAlgorithm.HS512, 'secretKey'.getBytes('UTF-8'))
                         .compact()
 

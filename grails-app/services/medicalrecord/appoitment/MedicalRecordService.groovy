@@ -1,9 +1,7 @@
 package medicalrecord.appoitment
 
 import grails.gorm.transactions.Transactional
-import medicalrecord.patient.Patient
 import medicalrecord.user.Doctor
-import org.hibernate.Hibernate
 
 import java.time.LocalDateTime
 
